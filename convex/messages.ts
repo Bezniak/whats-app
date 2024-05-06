@@ -1,5 +1,6 @@
 import {ConvexError, v} from "convex/values";
 import {mutation, query} from "./_generated/server";
+import {api} from "./_generated/api";
 
 export const sendTextMessage = mutation({
     args: {
@@ -41,9 +42,25 @@ export const sendTextMessage = mutation({
             conversation: args.conversation,
             messageType: "text",
         });
+
     },
 });
 
+export const sendChatGPTMessage = mutation({
+    args: {
+        content: v.string(),
+        conversation: v.id("conversations"),
+        messageType: v.union(v.literal("text"), v.literal("image")),
+    },
+    handler: async (ctx, args) => {
+        await ctx.db.insert("messages", {
+            content: args.content,
+            sender: "ChatGPT",
+            messageType: args.messageType,
+            conversation: args.conversation,
+        });
+    },
+});
 
 // Optimized
 export const getMessages = query({
@@ -128,3 +145,36 @@ export const sendVideo = mutation({
         });
     },
 });
+
+// unoptimized
+
+// export const getMessages = query({
+// 	args:{
+// 		conversation: v.id("conversations"),
+// 	},
+// 	handler: async (ctx, args) => {
+// 		const identity = await ctx.auth.getUserIdentity();
+// 		if (!identity) {
+// 			throw new ConvexError("Not authenticated");
+// 		}
+
+// 		const messages = await ctx.db
+// 		.query("messages")
+// 		.withIndex("by_conversation", q=> q.eq("conversation", args.conversation))
+// 		.collect();
+
+// 		// john => 200 , 1
+// 		const messagesWithSender = await Promise.all(
+// 			messages.map(async (message) => {
+// 				const sender = await ctx.db
+// 				.query("users")
+// 				.filter(q => q.eq(q.field("_id"), message.sender))
+// 				.first();
+
+// 				return {...message,sender}
+// 			})
+// 		)
+
+// 		return messagesWithSender;
+// 	}
+// });
