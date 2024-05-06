@@ -1,7 +1,7 @@
 const authConfig = {
     providers: [
         {
-            domain: "https://humorous-albacore-52.clerk.accounts.dev",
+            domain: process.env.CLERK_ISSUER_URL,
             applicationID: "convex",
         },
     ]

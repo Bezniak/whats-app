@@ -4,7 +4,7 @@ import "./globals.css";
 import {ThemeProvider} from "@/providers/theme-provider";
 import ConvexClientProvider from "@/providers/convex-client-provider";
 import {Toaster} from "react-hot-toast";
-
+import React from "react";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -19,14 +19,9 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang='en'>
         <body className={inter.className}>
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-        >
+        <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
             <ConvexClientProvider>
                 {children}
                 <Toaster/>

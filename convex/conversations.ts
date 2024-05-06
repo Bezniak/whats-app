@@ -12,11 +12,6 @@ export const createConversation = mutation({
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
         if (!identity) throw new ConvexError("Unauthorized");
-
-        // jane and john
-        // [jane, john]
-        // [john, jane]
-
         const existingConversation = await ctx.db
             .query("conversations")
             .filter((q) =>
