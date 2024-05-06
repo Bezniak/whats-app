@@ -1,7 +1,9 @@
 import type {Metadata} from "next";
 import {Inter} from "next/font/google";
 import "./globals.css";
-import {ThemeProvider} from "@/app/providers/theme-provider";
+import {ThemeProvider} from "@/providers/theme-provider";
+import ConvexClientProvider from "@/providers/convex-client-provider";
+import {ClerkProvider} from "@clerk/nextjs";
 
 
 const inter = Inter({subsets: ["latin"]});
@@ -25,7 +27,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-            {children}
+            <ConvexClientProvider>
+                {children}
+            </ConvexClientProvider>
         </ThemeProvider>
         </body>
         </html>
